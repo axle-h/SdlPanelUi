@@ -2,9 +2,13 @@
 #include <iostream>
 #include <SDL.h>
 #include "res_path.h"
+#include "SdlPanelUiConfig.h"
 
 
-int main(){
+int main(int argc, char *argv[]) {
+
+    printf("%s Version %d.%d\n", SdlPanelUi_PROJECT_NAME, SdlPanelUi_VERSION_MAJOR, SdlPanelUi_VERSION_MINOR);
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;

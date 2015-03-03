@@ -8,8 +8,8 @@
 /*
  * Get the resource path for resources located in res/subDir
  */
-std::string getResourcePath(const std::string &subDir = ""){
-    return "C:\\Temp\\";
+std::string getResourcePath(const std::string &subDir = "") {
+    return "C:\\Workspace\\SdlPanelUi\\res\\images\\";
 #if defined(_WIN32) || defined(__CYGWIN__)
 	const char PATH_SEP = '\\';
 #else

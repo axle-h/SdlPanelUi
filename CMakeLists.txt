@@ -1,7 +1,18 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(SdlPanelUi)
 
-# Use our modified FindSDL2* modules
+set (SdlPanelUi_VERSION_MAJOR 1)
+set (SdlPanelUi_VERSION_MINOR 0)
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/SdlPanelUiConfig.h.in"
+  "${PROJECT_BINARY_DIR}/SdlPanelUiConfig.h"
+  )
+
+
+# Use our modified FindSDL2 modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${SdlPanelUi_SOURCE_DIR}/cmake")
 
 # Set an output directory for our binaries
@@ -32,6 +43,10 @@ include_directories(${SDL2_INCLUDE_DIR})
 # Project includes
 include_directories(include)
 
+# add the binary tree to the search path for include files
+# so that we will find TutorialConfig.h
+include_directories("${PROJECT_BINARY_DIR}")
+
 add_executable(SdlPanelUi ${SOURCE_FILES})
 target_link_libraries(SdlPanelUi ${SDL2_LIBRARY})
-install(TARGETS SdlPanelUi RUNTIME DESTINATION ${BIN_DIR})
+install(DIRECTORY res DESTINATION res)
