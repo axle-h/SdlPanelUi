@@ -1,5 +1,4 @@
-#ifndef SDLPANELUI_RES_PATH_H
-#define SDLPANELUI_RES_PATH_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -37,5 +36,3 @@ std::string getResourcePath(const std::string &subDir = "") {
     //append it to the base path. This would be something like Lessons/res/Lesson0
     return subDir.empty() ? baseRes : baseRes + subDir + PATH_SEP;
 }
-
-#endif

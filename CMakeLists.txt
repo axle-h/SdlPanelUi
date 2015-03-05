@@ -19,7 +19,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${SdlPanelUi_SOURCE_DIR}/cmake")
 set(BIN_DIR ${PROJECT_BINARY_DIR}/bin)
 
 # Source files
-set(SOURCE_FILES src/main.cpp)
+set(SOURCE_FILES src/main.cpp src/sdl/utils.cpp src/sdl/ui.cpp src/sdl/events.cpp)
 
 # Bump up warning levels appropriately for clang, gcc & msvc
 # Also set debug/optimization flags depending on the build type. IDE users choose this when
