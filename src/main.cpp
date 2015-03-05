@@ -10,7 +10,7 @@ int main() {
 
     printf("%s Version %d.%d\n", SdlPanelUi_PROJECT_NAME, SdlPanelUi_VERSION_MAJOR, SdlPanelUi_VERSION_MINOR);
 
-    SdlUi *ui = new SdlUi(640, 480);
+    SdlUi *ui = new SdlUi(SdlPanelUi_FB_WIDTH, SdlPanelUi_FB_HEIGHT);
     if(!ui->init()) {
         return 1;
     }

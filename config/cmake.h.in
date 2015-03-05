@@ -4,3 +4,6 @@
 #define SdlPanelUi_VERSION_MAJOR @SdlPanelUi_VERSION_MAJOR@
 #define SdlPanelUi_VERSION_MINOR @SdlPanelUi_VERSION_MINOR@
 #define SdlPanelUi_PROJECT_NAME "@CMAKE_PROJECT_NAME@"
+
+#define SdlPanelUi_FB_WIDTH @SdlPanelUi_FB_WIDTH@
+#define SdlPanelUi_FB_HEIGHT @SdlPanelUi_FB_HEIGHT@

@@ -4,6 +4,10 @@ project(SdlPanelUi)
 set (SdlPanelUi_VERSION_MAJOR 1)
 set (SdlPanelUi_VERSION_MINOR 0)
 
+set (SdlPanelUi_FB_WIDTH 320)
+set (SdlPanelUi_FB_HEIGHT 240)
+
+
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
