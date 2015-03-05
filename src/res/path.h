@@ -1,5 +1,5 @@
-#ifndef RES_PATH_H
-#define RES_PATH_H
+#ifndef SDLPANELUI_RES_PATH_H
+#define SDLPANELUI_RES_PATH_H
 
 #include <iostream>
 #include <string>
@@ -9,7 +9,6 @@
  * Get the resource path for resources located in res/subDir
  */
 std::string getResourcePath(const std::string &subDir = "") {
-    return "C:\\Workspace\\SdlPanelUi\\res\\images\\";
 #if defined(_WIN32) || defined(__CYGWIN__)
 	const char PATH_SEP = '\\';
 #else

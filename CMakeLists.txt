@@ -7,7 +7,7 @@ set (SdlPanelUi_VERSION_MINOR 0)
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
-  "${PROJECT_SOURCE_DIR}/src/SdlPanelUiConfig.h.in"
+  "${PROJECT_SOURCE_DIR}/config/cmake.h.in"
   "${PROJECT_BINARY_DIR}/SdlPanelUiConfig.h"
   )
 
@@ -49,4 +49,4 @@ include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable(SdlPanelUi ${SOURCE_FILES})
 target_link_libraries(SdlPanelUi ${SDL2_LIBRARY})
-install(DIRECTORY res DESTINATION res)
+install(DIRECTORY res DESTINATION ${PROJECT_BINARY_DIR})

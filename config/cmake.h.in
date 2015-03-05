@@ -1,0 +1,9 @@
+// CMake Config File
+#ifndef SDLPANELUI_CONFIG_CMAKE_H
+#define SDLPANELUI_CONFIG_CMAKE_H
+
+#define SdlPanelUi_VERSION_MAJOR @SdlPanelUi_VERSION_MAJOR@
+#define SdlPanelUi_VERSION_MINOR @SdlPanelUi_VERSION_MINOR@
+#define SdlPanelUi_PROJECT_NAME "@CMAKE_PROJECT_NAME@"
+
+#endif
