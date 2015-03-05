@@ -21,6 +21,7 @@ public:
         while (1) {
             if(!SDL_WaitEvent(&e)) {
                 logSDLError("SDL_WaitEvent");
+                return false;
             }
 
             if (e.type == SDL_QUIT){
