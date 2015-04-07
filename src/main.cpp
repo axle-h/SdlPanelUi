@@ -17,8 +17,9 @@ int main() {
 
     SdlEvents *events = new SdlEvents(ui);
 
-    std::string imagePath = getResourcePath("images") + "hello.bmp";
-    bool error = events->run(imagePath);
+    std::string hello1 = getResourcePath("images") + "hello.bmp";
+    std::string hello2 = getResourcePath("images") + "hello2.bmp";
+    bool error = events->run(hello1, hello2);
 
     delete events;
     delete ui;

@@ -4,8 +4,8 @@ project(SdlPanelUi)
 set (SdlPanelUi_VERSION_MAJOR 1)
 set (SdlPanelUi_VERSION_MINOR 0)
 
-set (SdlPanelUi_FB_WIDTH 320)
-set (SdlPanelUi_FB_HEIGHT 240)
+set (SdlPanelUi_FB_WIDTH 640)
+set (SdlPanelUi_FB_HEIGHT 480)
 
 
 # configure a header file to pass some of the CMake settings
@@ -17,7 +17,7 @@ configure_file (
 
 
 # Use our modified FindSDL2 modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${SdlPanelUi_SOURCE_DIR}/cmake")
+# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${SdlPanelUi_SOURCE_DIR}/cmake")
 
 # Set an output directory for our binaries
 set(BIN_DIR ${PROJECT_BINARY_DIR}/bin)
@@ -41,8 +41,11 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 endif()
 
 # Look up SDL2 and add the include directory to our include path
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIR})
+find_package(SDL REQUIRED)
+include_directories(${SDL_INCLUDE_DIR})
+
+find_package(SDL_image REQUIRED)
+include_directories(${SDL_IMAGE_INCLUDE_DIRS})
 
 # Project includes
 include_directories(include)
@@ -52,5 +55,6 @@ include_directories(include)
 include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable(SdlPanelUi ${SOURCE_FILES})
-target_link_libraries(SdlPanelUi ${SDL2_LIBRARY})
+target_link_libraries(SdlPanelUi ${SDL_LIBRARY})
+target_link_libraries(SdlPanelUi ${SDL_IMAGE_LIBRARIES})
 install(DIRECTORY res DESTINATION ${PROJECT_BINARY_DIR})

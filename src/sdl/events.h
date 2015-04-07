@@ -10,6 +10,6 @@ public:
     SdlEvents(SdlUi *ui);
     ~SdlEvents();
 
-    bool run(const std::string &file);
+    bool run(const std::string &file1, const std::string &file2);
 
 };

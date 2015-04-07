@@ -20,7 +20,5 @@ void sdlCleanup(T *t, Args &&... args) {
     sdlCleanup(std::forward<Args>(args)...);
 }
 
-template<> void sdlCleanup<SDL_Window>(SDL_Window *win);
-template<> void sdlCleanup<SDL_Renderer>(SDL_Renderer *ren);
-template<> void sdlCleanup<SDL_Texture>(SDL_Texture *tex);
-template<> void sdlCleanup<SDL_Surface>(SDL_Surface *surf);
+template<> void sdlCleanup<SDL_Cursor>(SDL_Cursor *cursor);
+template<> void sdlCleanup<SDL_Surface>(SDL_Surface *surface);

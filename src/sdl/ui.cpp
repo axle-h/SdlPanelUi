@@ -7,7 +7,7 @@
 SdlUi::SdlUi(const int width, const int height) : width(width), height(height) { }
 SdlUi::~SdlUi() {
     std::cout << "Shutdown" << std::endl;
-    sdlCleanup(this->pBackground, this->pSDLRenderer, this->pSDLWindow);
+    sdlCleanup(this->pBackground, this->pSDLWindow);
     SDL_Quit();
 }
 
@@ -17,25 +17,20 @@ bool SdlUi::init() {
         return false;
     }
 
-    this->pSDLWindow = SDL_CreateWindow("SDL UI", 100, 100, this->width, this->height, SDL_WINDOW_SHOWN);
+    SDL_WM_SetCaption("SDL UI", "SDL UI");
+    this->pSDLWindow = SDL_SetVideoMode(this->width, this->height, 32, SDL_SWSURFACE);
+
     if (this->pSDLWindow == nullptr){
         logSDLError("SDL_CreateWindow");
         return false;
     }
 
-    this->pSDLRenderer = SDL_CreateRenderer(this->pSDLWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (pSDLRenderer == nullptr){
-        logSDLError("SDL_CreateRenderer");
-        return false;
-    }
-
-    this->createBackground();
     return true;
 }
 
 bool SdlUi::showImage(const std::string &file) {
     //Initialize to nullptr to avoid dangling pointer issues
-    sdlCleanup(this->pBackground);
+    (this->pBackground);
     this->pBackground = nullptr;
 
     //Load the image
@@ -43,27 +38,18 @@ bool SdlUi::showImage(const std::string &file) {
 
     //If the loading went ok, convert to texture and set to the background
     if (loadedImage != nullptr){
-        this->pBackground = SDL_CreateTextureFromSurface(this->pSDLRenderer, loadedImage);
-        SDL_FreeSurface(loadedImage);
-
-        //Make sure converting went ok too
-        if (this->pBackground == nullptr){
-            logSDLError("CreateTextureFromSurface");
-            return false;
-        }
+        this->pBackground = loadedImage;
     }
     else {
         logSDLError("LoadBMP");
         return false;
     }
 
-    SDL_RenderClear(this->pSDLRenderer);
-    SDL_RenderCopy(this->pSDLRenderer, this->pBackground, NULL, NULL);
-    SDL_RenderPresent(this->pSDLRenderer);
+    //Apply image to screen
+    SDL_BlitSurface(this->pBackground, NULL, this->pSDLWindow, NULL);
+
+    //Update Screen
+    SDL_Flip(this->pSDLWindow);
 
     return true;
-}
-
-void SdlUi::hideImage() {
-    this->createBackground();
 }

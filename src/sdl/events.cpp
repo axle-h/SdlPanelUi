@@ -7,12 +7,11 @@
 SdlEvents::SdlEvents(SdlUi *ui) : ui(ui) { }
 SdlEvents::~SdlEvents() {}
 
-bool SdlEvents::run(const std::string &file) {
+bool SdlEvents::run(const std::string &file1, const std::string &file2) {
 
     SDL_Event e;
-    bool imageIsShowing = false;
-    bool showImage = false;
-    bool hideImage = false;
+    int currentImage = 1;
+    ui->showImage(file1);
 
     while (1) {
         if(!SDL_WaitEvent(&e)) {
@@ -25,27 +24,14 @@ bool SdlEvents::run(const std::string &file) {
         }
 
         if (e.type == SDL_MOUSEBUTTONDOWN) {
-            if(imageIsShowing) {
-                hideImage = true;
-            } else {
-                showImage = true;
-            }
+            currentImage = currentImage == 1 ? 2 : 1;
         }
 
         //Render the scene
-        if(showImage && !imageIsShowing) {
-            if(!ui->showImage(file)) {
-                return false;
-            }
-            showImage = false;
-            imageIsShowing = true;
+        if(!ui->showImage(currentImage == 1 ? file1 : file2)) {
+            return false;
         }
 
-        if(hideImage && imageIsShowing) {
-            ui->hideImage();
-            hideImage = false;
-            imageIsShowing = false;
-        }
 
     }
 

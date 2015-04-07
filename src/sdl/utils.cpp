@@ -21,28 +21,13 @@ void logSDLError(const std::string &msg){
  * don't want to bother finding out which values failed to load (and thus are null)
  * but rather just want to clean everything up and let cleanup sort it out
  */
-template<>
-void sdlCleanup<SDL_Window>(SDL_Window *win) {
-    if (!win){
-        return;
-    }
-    SDL_DestroyWindow(win);
-}
 
 template<>
-void sdlCleanup<SDL_Renderer>(SDL_Renderer *ren) {
-    if (!ren){
+void sdlCleanup<SDL_Cursor>(SDL_Cursor *cursor) {
+    if (!cursor){
         return;
     }
-    SDL_DestroyRenderer(ren);
-}
-
-template<>
-void sdlCleanup<SDL_Texture>(SDL_Texture *tex) {
-    if (!tex){
-        return;
-    }
-    SDL_DestroyTexture(tex);
+    SDL_FreeCursor(cursor);
 }
 
 template<>
