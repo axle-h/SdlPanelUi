@@ -8,9 +8,10 @@ private:
     int width, height;
     SDL_Surface *pSDLWindow;
     SDL_Surface *pBackground;
+    std::string fonts;
 
 public:
-    SdlUi(const int width, const int height);
+    SdlUi(std::string fonts, const int width, const int height);
     ~SdlUi();
 
     bool init();

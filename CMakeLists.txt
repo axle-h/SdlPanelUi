@@ -23,7 +23,7 @@ configure_file (
 set(BIN_DIR ${PROJECT_BINARY_DIR}/bin)
 
 # Source files
-set(SOURCE_FILES src/main.cpp src/sdl/utils.cpp src/sdl/ui.cpp src/sdl/events.cpp)
+file(GLOB_RECURSE SOURCE_FILES "src/*.h" "src/*.cpp" "src/*.c" "src/*.rl")
 
 # Bump up warning levels appropriately for clang, gcc & msvc
 # Also set debug/optimization flags depending on the build type. IDE users choose this when
@@ -32,6 +32,10 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -g")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} -O2")
+
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -std=c99")
+
+
 elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 	if (CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
 		string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -47,14 +51,18 @@ include_directories(${SDL_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDL_IMAGE_INCLUDE_DIRS})
 
+find_package(SDL_ttf REQUIRED)
+include_directories(${SDL_TTF_INCLUDE_DIRS})
+
 # Project includes
 include_directories(include)
 
 # add the binary tree to the search path for include files
-# so that we will find TutorialConfig.h
+# so that we will find SdlPanelUiConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(SdlPanelUi ${SOURCE_FILES})
+add_executable(SdlPanelUi ${SOURCE_FILES} src/sdl/litehtml_container.h src/sdl/litehtml_container.cpp src/litehtml/litehtml.h)
 target_link_libraries(SdlPanelUi ${SDL_LIBRARY})
 target_link_libraries(SdlPanelUi ${SDL_IMAGE_LIBRARIES})
+target_link_libraries(SdlPanelUi ${SDL_TTF_LIBRARIES})
 install(DIRECTORY res DESTINATION ${PROJECT_BINARY_DIR})
