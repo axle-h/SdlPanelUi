@@ -4,10 +4,10 @@
 
 class litehtml_container :	public litehtml::document_container {
 private:
-    char const *monoTtfFile, *sansTtfFile, *serifTtfFile;
+    std::string *monoTtfFile, *sansTtfFile, *serifTtfFile;
 
 public:
-    litehtml_container(const std::string monoTtfFile, const std::string sansTtfFile, const std::string serifTtfFile);
+    litehtml_container(std::string *monoTtfFile, std::string *sansTtfFile, std::string *serifTtfFile);
     ~litehtml_container();
 
     litehtml::uint_ptr create_font(const litehtml::tchar_t* faceName, int size, int weight, litehtml::font_style italic, unsigned int decoration, litehtml::font_metrics* fm);

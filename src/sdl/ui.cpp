@@ -7,7 +7,7 @@
 #include "litehtml_container.h"
 
 
-SdlUi::SdlUi(const std::string fonts, const int width, const int height) : fonts(fonts), width(width), height(height) { }
+SdlUi::SdlUi(std::string fonts, const int width, const int height) : fonts(fonts), width(width), height(height) { }
 SdlUi::~SdlUi() {
     std::cout << "Shutdown" << std::endl;
     sdlCleanup(this->pBackground, this->pSDLWindow);
@@ -36,7 +36,11 @@ bool SdlUi::init() {
         return false;
     }
 
-    litehtml_container* litehtmlContainer = new litehtml_container(this->fonts + "FreeMono.ttf", this->fonts + "FreeSans.ttf", this->fonts + "FreeSerif.ttf");
+    std::string monoFont = this->fonts + "FreeMono.ttf";
+    std::string sansFont = this->fonts + "FreeSans.ttf";
+    std::string serifFont = this->fonts + "FreeSerif.ttf";
+
+    litehtml_container* litehtmlContainer = new litehtml_container(&monoFont, &sansFont, &serifFont);
     litehtml::context html_context = litehtml::context();
     html_context.load_master_stylesheet("");
     litehtml::document::ptr m_html = litehtml::document::createFromString("<html><body>Hello World!</body></html>", litehtmlContainer, &html_context);

@@ -3,9 +3,9 @@
 #include "litehtml_container.h"
 
 
-litehtml_container::litehtml_container(const std::string monoTtfFile, const std::string sansTtfFile,
-                                       const std::string serifTtfFile)
-        : monoTtfFile(monoTtfFile.c_str()), sansTtfFile(sansTtfFile.c_str()), serifTtfFile(serifTtfFile.c_str()) {
+litehtml_container::litehtml_container(std::string *monoTtfFile, std::string *sansTtfFile,
+                                       std::string *serifTtfFile)
+        : monoTtfFile(monoTtfFile), sansTtfFile(sansTtfFile), serifTtfFile(serifTtfFile) {
 }
 
 litehtml_container::~litehtml_container() {
@@ -26,7 +26,7 @@ litehtml::uint_ptr litehtml_container::create_font(const litehtml::tchar_t *face
     litehtml::split_string(faceName, fonts, _t(","));
 
     //std::string fnt_name = fonts.empty() ? "sans-serif" : fonts[0];
-    const char* fnt_name = this->monoTtfFile;
+    const char* fnt_name = this->monoTtfFile->c_str();
 
     TTF_Font* font = TTF_OpenFont(fnt_name, size);
 
@@ -66,6 +66,12 @@ litehtml::uint_ptr litehtml_container::create_font(const litehtml::tchar_t *face
         fm->height		= TTF_FontHeight(font);
         fm->x_height	= iWidth;
         fm->draw_spaces = italic == litehtml::fontStyleItalic || decoration;
+
+        std::cout << "[create_font] ascent: " << fm->ascent
+            << ", descent: " << fm->descent
+            << ", height: " << fm->height
+            << ", x_height: " << fm->x_height
+            << ", draw_spaces: " << fm->draw_spaces  << std::endl;
     }
 
     return (litehtml::uint_ptr) font;
@@ -73,6 +79,8 @@ litehtml::uint_ptr litehtml_container::create_font(const litehtml::tchar_t *face
 
 void litehtml_container::delete_font(litehtml::uint_ptr hFont) {
     TTF_Font* font = (TTF_Font*)hFont;
+
+    std::cout << "[delete_font] font: " << (font ? "not null" : "null") << std::endl;
     if(font)
     {
         TTF_CloseFont( font );
@@ -80,14 +88,17 @@ void litehtml_container::delete_font(litehtml::uint_ptr hFont) {
 }
 
 int litehtml_container::text_width(const litehtml::tchar_t *text, litehtml::uint_ptr hFont) {
+
     TTF_Font* font = (TTF_Font*)hFont;
     if(!font)
     {
+        std::cout << "[text_width](" << text << ") font: null" << std::endl;
         return 0;
     }
 
     int iWidth = 0, iHeight = 0;
     TTF_SizeText(font, _t(text), &iWidth, &iHeight);
+    std::cout << "[text_width](" << text << ") width: " << iWidth << std::endl;
     return iWidth;
 }
 
