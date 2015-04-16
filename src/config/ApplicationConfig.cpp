@@ -1,10 +1,44 @@
 #include <sstream>
+#include <libconfig.h++>
 #include "ApplicationConfig.h"
 #include "SdlPanelUiConfig.h"
 
 class ApplicationConfig : public IApplicationConfig {
+private:
+    int width, height;
+
 public:
-    INJECT(ApplicationConfig()) = default;
+    INJECT(ApplicationConfig()) {
+        libconfig::Config cfg;
+        std::string file = this->getResourcePath("config") + "SdlPanelUi.config";
+
+        try
+        {
+            cfg.readFile(file.c_str());
+            const libconfig::Setting &root = cfg.getRoot();
+            this->width = root["SdlPanelUi"]["width"];
+            this->height = root["SdlPanelUi"]["height"];
+        }
+        catch(const libconfig::FileIOException &ex)
+        {
+            std::cerr << "I/O error while reading config file: " << file << std::endl;
+            throw ex;
+        }
+        catch(const libconfig::ParseException &ex)
+        {
+            std::cerr << "Parse error at " << ex.getFile() << ":" << ex.getLine() << " - " << ex.getError() << std::endl;
+            throw ex;
+        }
+        catch(libconfig::SettingTypeException &ex) {
+            std::cerr << "Wrong type for setting: " << ex.getPath() << std::endl;
+            throw ex;
+        }
+        catch(libconfig::SettingNotFoundException &ex) {
+            std::cerr << "Setting not found: " << ex.getPath() << std::endl;
+            throw ex;
+        }
+
+    };
 
     virtual std::string getVersionString() override {
         std::stringstream stream;
@@ -13,16 +47,17 @@ public:
     }
 
     virtual int getWindowWidth() override {
-        return SdlPanelUi_FB_WIDTH;
+        return this->width;
     }
 
     virtual int getWindowHeight() override {
-        return SdlPanelUi_FB_HEIGHT;
+        return this->height;
     }
 
     virtual std::string getResourcePath(const std::string subDir = "") override {
-        std::string result = "/home/alex/working/C++/SdlPanelUi/res/" + subDir + "/";
-        return result;
+        std::stringstream stream;
+        stream << SdlPanelUi_INSTALL_PREFIX << "/SdlPanelUi/resources/" << subDir << "/";
+        return stream.str();
     }
 
     virtual std::string getLog4CppConfigPath() override {

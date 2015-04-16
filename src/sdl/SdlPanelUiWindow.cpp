@@ -3,7 +3,7 @@
 #include <SDL_ttf.h>
 #include "utils.h"
 #include "SdlPanelUiWindow.h"
-#include "../litehtml/litehtml.h"
+#include <litehtml/litehtml.h>
 #include "litehtml_container.h"
 
 class SdlPanelUiWindow : public ISdlPanelUiWindow {

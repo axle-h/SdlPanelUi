@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../litehtml/litehtml.h"
+#include <litehtml/html.h>
 
 class litehtml_container :	public litehtml::document_container {
 private:

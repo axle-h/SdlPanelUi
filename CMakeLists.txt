@@ -7,23 +7,23 @@ set (SdlPanelUi_VERSION_MINOR 0)
 set (SdlPanelUi_FB_WIDTH 640)
 set (SdlPanelUi_FB_HEIGHT 480)
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-# configure a header file to pass some of the CMake settings
-# to the source code
+
+# configure a header file to pass some of the CMake settings to the source code
 configure_file (
-  "src/config/cmake.h.in"
-  "${PROJECT_BINARY_DIR}/SdlPanelUiConfig.h"
+  "cmake.h.in"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.h"
   )
 
-
-# Use our modified FindSDL2 modules
-# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${SdlPanelUi_SOURCE_DIR}/cmake")
-
-# Set an output directory for our binaries
-set(BIN_DIR ${PROJECT_BINARY_DIR}/bin)
+# add the binary tree to the search path for include files
+# so that we will find SdlPanelUiConfig.h
+include_directories("${PROJECT_BINARY_DIR}")
 
 # Source files
-file(GLOB_RECURSE SOURCE_FILES "src/*.h" "src/*.cpp" "src/*.c" "src/*.rl")
+file(GLOB_RECURSE SOURCE_FILES "src/*.h" "src/*.cpp")
 
 # Bump up warning levels appropriately for clang, gcc & msvc
 # Also set debug/optimization flags depending on the build type. IDE users choose this when
@@ -44,9 +44,6 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 	endif()
 endif()
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-# Look up SDL2 and add the include directory to our include path
 find_package(SDL REQUIRED)
 include_directories(${SDL_INCLUDE_DIR})
 
@@ -62,13 +59,15 @@ include_directories(${LOG4CPP_INCLUDE_DIR})
 find_package(Fruit REQUIRED)
 include_directories(${FRUIT_INCLUDE_DIR})
 
-
-# add the binary tree to the search path for include files
-# so that we will find SdlPanelUiConfig.h
-include_directories("${PROJECT_BINARY_DIR}")
+find_package(LibConfig++ REQUIRED)
+include_directories(${LIBCONFIG_INCLUDE_DIR})
 
 # Project includes
 include_directories(include)
+
+# Build litehtml
+file(GLOB_RECURSE LITEHTML_SRC_FILES include/litehtml/*.h include/litehtml/*.cpp include/litehtml/*.c include/litehtml/*.rl)
+add_library(LiteHtml ${LITEHTML_SRC_FILES})
 
 add_executable(SdlPanelUi ${SOURCE_FILES})
 target_link_libraries(SdlPanelUi ${SDL_LIBRARY})
@@ -76,4 +75,11 @@ target_link_libraries(SdlPanelUi ${SDL_IMAGE_LIBRARIES})
 target_link_libraries(SdlPanelUi ${SDL_TTF_LIBRARIES})
 target_link_libraries(SdlPanelUi ${LOG4CPP_LIBRARIES})
 target_link_libraries(SdlPanelUi ${FRUIT_LIBRARIES})
-install(DIRECTORY res DESTINATION ${PROJECT_BINARY_DIR})
+target_link_libraries(SdlPanelUi ${LIBCONFIG_LIBRARIES})
+target_link_libraries(SdlPanelUi LiteHtml)
+
+
+install(TARGETS SdlPanelUi DESTINATION ${PROJECT_NAME}/bin)
+install(TARGETS LiteHtml DESTINATION ${PROJECT_NAME}/lib)
+install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.h" DESTINATION "${PROJECT_NAME}/include")
+install(DIRECTORY resources DESTINATION ${PROJECT_NAME})
