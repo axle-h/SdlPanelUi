@@ -2,20 +2,20 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "utils.h"
-#include "ui.h"
+#include "SdlPanelUiWindow.h"
 #include "../litehtml/litehtml.h"
 #include "litehtml_container.h"
 
 
-SdlUi::SdlUi(std::string fonts, const int width, const int height) : fonts(fonts), width(width), height(height) { }
-SdlUi::~SdlUi() {
+SdlPanelUiWindow::SdlPanelUiWindow(std::string fonts, const int width, const int height) : fonts(fonts), width(width), height(height) { }
+SdlPanelUiWindow::~SdlPanelUiWindow() {
     std::cout << "Shutdown" << std::endl;
     sdlCleanup(this->pBackground, this->pSDLWindow);
     TTF_Quit();
     SDL_Quit();
 }
 
-bool SdlUi::init() {
+bool SdlPanelUiWindow::init() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         logSDLError("SDL_Init");
         return false;
@@ -48,7 +48,7 @@ bool SdlUi::init() {
     return true;
 }
 
-bool SdlUi::showImage(const std::string &file) {
+bool SdlPanelUiWindow::showImage(const std::string &file) {
     //Initialize to nullptr to avoid dangling pointer issues
     (this->pBackground);
     this->pBackground = nullptr;

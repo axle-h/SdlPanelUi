@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <utility>
 
-class SdlUi {
+class SdlPanelUiWindow {
 private:
     int width, height;
     SDL_Surface *pSDLWindow;
@@ -11,8 +11,8 @@ private:
     std::string fonts;
 
 public:
-    SdlUi(std::string fonts, const int width, const int height);
-    ~SdlUi();
+    SdlPanelUiWindow(std::string fonts, const int width, const int height);
+    ~SdlPanelUiWindow();
 
     bool init();
 
