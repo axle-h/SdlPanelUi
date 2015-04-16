@@ -6,10 +6,28 @@
 #include "../litehtml/litehtml.h"
 #include "litehtml_container.h"
 
+class SdlPanelUiWindow : public ISdlPanelUiWindow {
+private:
+    IApplicationConfig *config;
+    ILogger *log;
+    SDL_Surface *pSDLWindow;
+    SDL_Surface *pBackground;
+    std::string fonts;
 
-SdlPanelUiWindow::SdlPanelUiWindow(std::string fonts, const int width, const int height) : fonts(fonts), width(width), height(height) { }
+public:
+    INJECT(SdlPanelUiWindow(ILogger *log, IApplicationConfig *config)) : log(log), config(config) {
+    }
+
+    ~SdlPanelUiWindow();
+
+    bool init();
+
+    bool showImage(const std::string &file);
+
+};
+
+
 SdlPanelUiWindow::~SdlPanelUiWindow() {
-    std::cout << "Shutdown" << std::endl;
     sdlCleanup(this->pBackground, this->pSDLWindow);
     TTF_Quit();
     SDL_Quit();
@@ -17,22 +35,22 @@ SdlPanelUiWindow::~SdlPanelUiWindow() {
 
 bool SdlPanelUiWindow::init() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        logSDLError("SDL_Init");
+        this->log->sdl_error("SDL_Init");
         return false;
     }
 
     SDL_WM_SetCaption("SDL UI", "SDL UI");
-    this->pSDLWindow = SDL_SetVideoMode(this->width, this->height, 32, SDL_SWSURFACE);
+    this->pSDLWindow = SDL_SetVideoMode(this->config->getWindowWidth(), this->config->getWindowHeight(), 32, SDL_SWSURFACE);
 
     if (this->pSDLWindow == nullptr){
-        logSDLError("SDL_CreateWindow");
+        this->log->sdl_error("SDL_CreateWindow");
         return false;
     }
 
     //Initialize SDL_ttf
     if(TTF_Init() == -1)
     {
-        logSDLError("TTF_Init");
+        this->log->sdl_error("TTF_Init");
         return false;
     }
 
@@ -61,7 +79,7 @@ bool SdlPanelUiWindow::showImage(const std::string &file) {
         this->pBackground = loadedImage;
     }
     else {
-        logSDLError("LoadBMP");
+        this->log->sdl_error("LoadBMP");
         return false;
     }
 
@@ -72,4 +90,8 @@ bool SdlPanelUiWindow::showImage(const std::string &file) {
     SDL_Flip(this->pSDLWindow);
 
     return true;
+}
+
+fruit::Component<fruit::Required<IApplicationConfig, ILogger>, ISdlPanelUiWindow> getSdlPanelUiWindowComponent() {
+    return fruit::createComponent().bind<ISdlPanelUiWindow, SdlPanelUiWindow>();
 }

@@ -1,36 +1,37 @@
 #
-# Locate log4cpp include paths and libraries
-# log4cpp can be found at http://log4cpp.sourceforge.net/
-# Written by Manfred Ulz, manfred.ulz_at_tugraz.at
+# Locate Google Fruit include paths and libraries
+# Fruit can be found at https://github.com/google/fruit
 
 # This module defines
-# LOG4CPP_INCLUDE_DIR, where to find ptlib.h, etc.
-# LOG4CPP_LIBRARIES, the libraries to link against to use pwlib.
-# LOG4CPP_FOUND, If false, don't try to use pwlib.
+# FRUIT_INCLUDE_DIR, where to find header file.
+# FRUIT_LIBRARIES, the libraries to link against to use fruit.
+# FRUIT_FOUND, If false, don't try to use fruit.
 
-FIND_PATH(LOG4CPP_INCLUDE_DIR log4cpp/Category.hh
+FIND_PATH(FRUIT_INCLUDE_DIR fruit/fruit.h
 PATHS
-"$ENV{LOG4CPP}/include"
+"$ENV{FRUIT}/include"
 /usr/local/include
+/usr/local/include/fruit/include
 /usr/include
+/usr/include/fruit/include
 )
 
-FIND_LIBRARY(LOG4CPP_LIBRARIES log4cpp
+FIND_LIBRARY(FRUIT_LIBRARIES fruit
 PATHS
-"$ENV{LOG4CPP}/lib"
+"$ENV{FRUIT}/lib"
 /usr/local/lib
 /usr/lib
 )
 
-SET(LOG4CPP_FOUND 0)
-IF(LOG4CPP_INCLUDE_DIR)
-IF(LOG4CPP_LIBRARIES)
-SET(LOG4CPP_FOUND 1)
-MESSAGE(STATUS "Found Log4CPP")
-ENDIF(LOG4CPP_LIBRARIES)
-ENDIF(LOG4CPP_INCLUDE_DIR)
+SET(FRUIT_FOUND 0)
+IF(FRUIT_INCLUDE_DIR)
+    IF(FRUIT_LIBRARIES)
+        SET(FRUIT_FOUND 1)
+        MESSAGE(STATUS "Found Google Fruit")
+    ENDIF(FRUIT_LIBRARIES)
+ENDIF(FRUIT_INCLUDE_DIR)
 
 MARK_AS_ADVANCED(
-LOG4CPP_INCLUDE_DIR
-LOG4CPP_LIBRARIES
+FRUIT_INCLUDE_DIR
+FRUIT_INCLUDE_DIR
 )

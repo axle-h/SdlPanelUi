@@ -2,20 +2,15 @@
 
 #include <SDL.h>
 #include <utility>
+#include "../config/ApplicationConfig.h"
+#include "../log/Logger.h"
 
-class SdlPanelUiWindow {
-private:
-    int width, height;
-    SDL_Surface *pSDLWindow;
-    SDL_Surface *pBackground;
-    std::string fonts;
 
+class ISdlPanelUiWindow {
 public:
-    SdlPanelUiWindow(std::string fonts, const int width, const int height);
-    ~SdlPanelUiWindow();
+    virtual bool init() = 0;
 
-    bool init();
-
-    bool showImage(const std::string &file);
-
+    virtual bool showImage(const std::string &file) = 0;
 };
+
+fruit::Component<fruit::Required<IApplicationConfig, ILogger>, ISdlPanelUiWindow> getSdlPanelUiWindowComponent();

@@ -11,7 +11,7 @@ set (SdlPanelUi_FB_HEIGHT 480)
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
-  "${PROJECT_SOURCE_DIR}/config/cmake.h.in"
+  "src/config/cmake.h.in"
   "${PROJECT_BINARY_DIR}/SdlPanelUiConfig.h"
   )
 
@@ -29,7 +29,7 @@ file(GLOB_RECURSE SOURCE_FILES "src/*.h" "src/*.cpp" "src/*.c" "src/*.rl")
 # Also set debug/optimization flags depending on the build type. IDE users choose this when
 # selecting the build mode in their IDE
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++11 -ftemplate-backtrace-limit=0 -DSDL_MAIN_HANDLED")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -g")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} -O2")
 
@@ -44,6 +44,8 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 	endif()
 endif()
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 # Look up SDL2 and add the include directory to our include path
 find_package(SDL REQUIRED)
 include_directories(${SDL_INCLUDE_DIR})
@@ -54,15 +56,24 @@ include_directories(${SDL_IMAGE_INCLUDE_DIRS})
 find_package(SDL_ttf REQUIRED)
 include_directories(${SDL_TTF_INCLUDE_DIRS})
 
-# Project includes
-include_directories(include)
+find_package(Log4CPP REQUIRED)
+include_directories(${LOG4CPP_INCLUDE_DIR})
+
+find_package(Fruit REQUIRED)
+include_directories(${FRUIT_INCLUDE_DIR})
+
 
 # add the binary tree to the search path for include files
 # so that we will find SdlPanelUiConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(SdlPanelUi ${SOURCE_FILES} src/sdl/litehtml_container.h src/sdl/litehtml_container.cpp src/litehtml/litehtml.h)
+# Project includes
+include_directories(include)
+
+add_executable(SdlPanelUi ${SOURCE_FILES})
 target_link_libraries(SdlPanelUi ${SDL_LIBRARY})
 target_link_libraries(SdlPanelUi ${SDL_IMAGE_LIBRARIES})
 target_link_libraries(SdlPanelUi ${SDL_TTF_LIBRARIES})
+target_link_libraries(SdlPanelUi ${LOG4CPP_LIBRARIES})
+target_link_libraries(SdlPanelUi ${FRUIT_LIBRARIES})
 install(DIRECTORY res DESTINATION ${PROJECT_BINARY_DIR})

@@ -1,14 +1,15 @@
-//
-// Created by alex on 14/04/15.
-//
+#pragma once
 
-#ifndef SDLPANELUI_APPLICATIONCONFIG_H
-#define SDLPANELUI_APPLICATIONCONFIG_H
+#include <iostream>
+#include <fruit/fruit.h>
 
-
-class ApplicationConfig {
-
+class IApplicationConfig {
+public:
+    virtual std::string getVersionString() = 0;
+    virtual int getWindowWidth() = 0;
+    virtual int getWindowHeight() = 0;
+    virtual std::string getResourcePath(const std::string subDir = "") = 0;
+    virtual std::string getLog4CppConfigPath() = 0;
 };
 
-
-#endif //SDLPANELUI_APPLICATIONCONFIG_H
+fruit::Component<IApplicationConfig> getApplicationConfigComponent();
