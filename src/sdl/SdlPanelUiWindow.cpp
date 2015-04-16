@@ -12,7 +12,6 @@ private:
     ILogger *log;
     SDL_Surface *pSDLWindow;
     SDL_Surface *pBackground;
-    std::string fonts;
 
 public:
     INJECT(SdlPanelUiWindow(ILogger *log, IApplicationConfig *config)) : log(log), config(config) {
@@ -54,9 +53,10 @@ bool SdlPanelUiWindow::init() {
         return false;
     }
 
-    std::string monoFont = this->fonts + "FreeMono.ttf";
-    std::string sansFont = this->fonts + "FreeSans.ttf";
-    std::string serifFont = this->fonts + "FreeSerif.ttf";
+    std::string fonts = this->config->getResourcePath("fonts");
+    std::string monoFont = fonts + "FreeMono.ttf";
+    std::string sansFont = fonts + "FreeSans.ttf";
+    std::string serifFont = fonts + "FreeSerif.ttf";
 
     litehtml_container* litehtmlContainer = new litehtml_container(&monoFont, &sansFont, &serifFont);
     litehtml::context html_context = litehtml::context();
