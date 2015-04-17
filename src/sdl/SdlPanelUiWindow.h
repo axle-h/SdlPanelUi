@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <utility>
+#include <litehtml/html.h>
 #include "../config/ApplicationConfig.h"
 #include "../log/Logger.h"
 
@@ -15,4 +16,4 @@ public:
     virtual bool showImage(const std::string &file) = 0;
 };
 
-fruit::Component<fruit::Required<IApplicationConfig, ILogger>, ISdlPanelUiWindow> getSdlPanelUiWindowComponent();
+fruit::Component<fruit::Required<IApplicationConfig, ILogger, litehtml::document_container>, ISdlPanelUiWindow> getSdlPanelUiWindowComponent();

@@ -4,7 +4,6 @@
 #include "utils.h"
 #include "SdlPanelUiWindow.h"
 #include <litehtml/litehtml.h>
-#include "litehtml_container.h"
 
 class SdlPanelUiWindow : public ISdlPanelUiWindow {
 private:
@@ -12,9 +11,11 @@ private:
     ILogger *log;
     SDL_Surface *pSDLWindow;
     SDL_Surface *pBackground;
+    litehtml::document_container *liteHtmlContainer;
 
 public:
-    INJECT(SdlPanelUiWindow(ILogger *log, IApplicationConfig *config)) : log(log), config(config) {
+    INJECT(SdlPanelUiWindow(ILogger *log, IApplicationConfig *config, litehtml::document_container *liteHtmlContainer))
+            : log(log), config(config), liteHtmlContainer(liteHtmlContainer) {
     }
 
     virtual ~SdlPanelUiWindow() {
@@ -51,15 +52,9 @@ bool SdlPanelUiWindow::init() {
         return false;
     }
 
-    std::string fonts = this->config->getResourcePath("fonts");
-    std::string monoFont = fonts + "FreeMono.ttf";
-    std::string sansFont = fonts + "FreeSans.ttf";
-    std::string serifFont = fonts + "FreeSerif.ttf";
-
-    litehtml_container* litehtmlContainer = new litehtml_container(&monoFont, &sansFont, &serifFont);
     litehtml::context html_context = litehtml::context();
     html_context.load_master_stylesheet("");
-    litehtml::document::ptr m_html = litehtml::document::createFromString("<html><body>Hello World!</body></html>", litehtmlContainer, &html_context);
+    litehtml::document::ptr m_html = litehtml::document::createFromString("<html><body>Hello World!</body></html>", this->liteHtmlContainer, &html_context);
 
     return true;
 }
@@ -90,6 +85,6 @@ bool SdlPanelUiWindow::showImage(const std::string &file) {
     return true;
 }
 
-fruit::Component<fruit::Required<IApplicationConfig, ILogger>, ISdlPanelUiWindow> getSdlPanelUiWindowComponent() {
+fruit::Component<fruit::Required<IApplicationConfig, ILogger, litehtml::document_container>, ISdlPanelUiWindow> getSdlPanelUiWindowComponent() {
     return fruit::createComponent().bind<ISdlPanelUiWindow, SdlPanelUiWindow>();
 }
