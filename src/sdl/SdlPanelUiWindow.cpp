@@ -17,7 +17,11 @@ public:
     INJECT(SdlPanelUiWindow(ILogger *log, IApplicationConfig *config)) : log(log), config(config) {
     }
 
-    ~SdlPanelUiWindow();
+    virtual ~SdlPanelUiWindow() {
+        sdlCleanup(this->pBackground, this->pSDLWindow);
+        TTF_Quit();
+        SDL_Quit();
+    }
 
     bool init();
 
@@ -25,12 +29,6 @@ public:
 
 };
 
-
-SdlPanelUiWindow::~SdlPanelUiWindow() {
-    sdlCleanup(this->pBackground, this->pSDLWindow);
-    TTF_Quit();
-    SDL_Quit();
-}
 
 bool SdlPanelUiWindow::init() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {

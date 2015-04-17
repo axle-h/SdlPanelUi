@@ -1,6 +1,4 @@
 #include "SdlPanelUi.h"
-#include "utils.h"
-
 
 class SdlPanelUi : public ISdlPanelUi {
 private:
@@ -14,7 +12,9 @@ public:
 
     virtual int run() override {
         this->log->debug(this->config->getVersionString());
-        this->ui->init();
+        if(!this->ui->init()) {
+            return 1;
+        }
 
         std::string file1 = this->config->getResourcePath("images") + "hello.bmp";
         std::string file2 = this->config->getResourcePath("images") + "hello2.bmp";

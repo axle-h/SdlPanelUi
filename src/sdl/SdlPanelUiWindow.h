@@ -8,6 +8,8 @@
 
 class ISdlPanelUiWindow {
 public:
+    virtual ~ISdlPanelUiWindow() = default;
+
     virtual bool init() = 0;
 
     virtual bool showImage(const std::string &file) = 0;

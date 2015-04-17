@@ -6,6 +6,8 @@
 
 class ILogger {
 public:
+    virtual ~ILogger() = default;
+
     virtual void debug(std::string value) = 0;
     virtual void debug(const char* stringFormat, ...) = 0;
 

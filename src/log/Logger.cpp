@@ -16,9 +16,8 @@ public:
         this->log = &log4cpp::Category::getRoot();
     }
 
-    ~Log4CppLogger() {
+    virtual ~Log4CppLogger() {
         log4cpp::Category::shutdown();
-        delete this->log;
     }
 
     virtual void debug(std::string value) override {

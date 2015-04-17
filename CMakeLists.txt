@@ -11,7 +11,6 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-
 # configure a header file to pass some of the CMake settings to the source code
 configure_file (
   "cmake.h.in"
@@ -45,41 +44,36 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 endif()
 
 find_package(SDL REQUIRED)
-include_directories(${SDL_INCLUDE_DIR})
-
 find_package(SDL_image REQUIRED)
-include_directories(${SDL_IMAGE_INCLUDE_DIRS})
-
 find_package(SDL_ttf REQUIRED)
-include_directories(${SDL_TTF_INCLUDE_DIRS})
-
 find_package(Log4CPP REQUIRED)
-include_directories(${LOG4CPP_INCLUDE_DIR})
-
 find_package(Fruit REQUIRED)
-include_directories(${FRUIT_INCLUDE_DIR})
-
 find_package(LibConfig++ REQUIRED)
-include_directories(${LIBCONFIG_INCLUDE_DIR})
 
 # Project includes
-include_directories(include)
+include_directories(include
+	${SDL_INCLUDE_DIR}
+	${SDL_IMAGE_INCLUDE_DIRS}
+	${SDL_TTF_INCLUDE_DIRS}
+	${LOG4CPP_INCLUDE_DIR}
+	${FRUIT_INCLUDE_DIR}
+	${LIBCONFIG_INCLUDE_DIR})
 
 # Build litehtml
 file(GLOB_RECURSE LITEHTML_SRC_FILES include/litehtml/*.h include/litehtml/*.cpp include/litehtml/*.c include/litehtml/*.rl)
-add_library(LiteHtml ${LITEHTML_SRC_FILES})
+add_library(LiteHtml STATIC ${LITEHTML_SRC_FILES})
 
 add_executable(SdlPanelUi ${SOURCE_FILES})
-target_link_libraries(SdlPanelUi ${SDL_LIBRARY})
-target_link_libraries(SdlPanelUi ${SDL_IMAGE_LIBRARIES})
-target_link_libraries(SdlPanelUi ${SDL_TTF_LIBRARIES})
-target_link_libraries(SdlPanelUi ${LOG4CPP_LIBRARIES})
-target_link_libraries(SdlPanelUi ${FRUIT_LIBRARIES})
-target_link_libraries(SdlPanelUi ${LIBCONFIG_LIBRARIES})
-target_link_libraries(SdlPanelUi LiteHtml)
-
+target_link_libraries(SdlPanelUi
+	${SDL_LIBRARY}
+	${SDL_IMAGE_LIBRARIES}
+	${SDL_IMAGE_LIBRARIES}
+	${SDL_TTF_LIBRARIES}
+	${LOG4CPP_LIBRARIES}
+	${FRUIT_LIBRARIES}
+	${LIBCONFIG_LIBRARIES}
+	LiteHtml)
 
 install(TARGETS SdlPanelUi DESTINATION ${PROJECT_NAME}/bin)
-install(TARGETS LiteHtml DESTINATION ${PROJECT_NAME}/lib)
 install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.h" DESTINATION "${PROJECT_NAME}/include")
 install(DIRECTORY resources DESTINATION ${PROJECT_NAME})
